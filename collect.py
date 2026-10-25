@@ -2,12 +2,11 @@ import os, csv, time, datetime as dt
 import requests
 import pandas as pd
 
-KEYS = [k for k in (os.environ.get("DGIS_KEY"),
-                    os.environ.get("DGIS_KEY2"),
-                    os.environ.get("DGIS_KEY_3")) if k]
+KEY = os.environ["DGIS_KEY"]
+URL = f"https://routing.api.2gis.com/routing/7.0.0/global?key={KEY}"
 OUT = "data/delays.csv"
 
-def route(lat1, lon1, lat2, lon2, start):
+def route(lat1, lon1, lat2, lon2):
     body = {
         "points": [
             {"type": "stop", "lat": float(lat1), "lon": float(lon1)},
@@ -17,23 +16,10 @@ def route(lat1, lon1, lat2, lon2, start):
         "route_mode": "fastest",
         "traffic_mode": "jam",
     }
-    err = "no keys"
-    n = len(KEYS)
-    for shift in range(n):
-        key = KEYS[(start + shift) % n]
-        url = f"https://routing.api.2gis.com/routing/7.0.0/global?key={key}"
-        try:
-            r = requests.post(url, json=body, timeout=20)
-            if r.status_code == 200:
-                result = r.json().get("result")
-                if result:
-                    return result[0]["total_duration"], result[0]["total_distance"]
-                err = "empty result"
-            else:
-                err = f"HTTP {r.status_code}"
-        except Exception as e:
-            err = type(e).__name__
-    raise RuntimeError(err)
+    r = requests.post(URL, json=body, timeout=20)
+    r.raise_for_status()
+    res = r.json()["result"][0]
+    return res["total_duration"], res["total_distance"]
 
 def weather():
     r = requests.get("https://api.open-meteo.com/v1/forecast", params={
@@ -60,13 +46,12 @@ def main():
             w.writerow(["ts_utc", "segment_id", "intersection", "direction",
                         "live_s", "length_m",
                         "temp_c", "precip_mm", "snow_cm", "wind_ms"])
-        for i, row in enumerate(segs.itertuples(index=False)):
+        for row in segs.itertuples(index=False):
             try:
                 live, length = route(row.lat_start, row.lon_start,
-                                     row.lat_end, row.lon_end,
-                                     i % max(len(KEYS), 1))
+                                     row.lat_end, row.lon_end)
             except Exception as e:
-                print("failed", row.segment_id, e)
+                print("failed", row.segment_id, type(e).__name__)
                 continue
             w.writerow([ts, row.segment_id, row.intersection, row.direction,
                         live, length,
