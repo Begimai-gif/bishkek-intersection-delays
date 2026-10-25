@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 
 KEYS = [k for k in (os.environ.get("DGIS_KEY"),
-                    os.environ.get("DGIS_KEY_2"),
+                    os.environ.get("DGIS_KEY2"),
                     os.environ.get("DGIS_KEY_3")) if k]
 OUT = "data/delays.csv"
 
