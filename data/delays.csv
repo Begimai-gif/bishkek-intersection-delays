@@ -1,2 +1,3 @@
 ts_utc,segment_id,intersection,direction,live_s,length_m,temp_c,precip_mm,snow_cm,wind_ms
 2026-10-25T07:50:41+00:00,moskovskaya_X_E,Московская/X,E,91,451,6.8,0.0,0.0,6.9
+2026-10-25T07:56:34+00:00,Zhusup_Abdrahmanova_X_E,Жусупа_Абдрахманова/X,E,67,451,6.8,0.0,0.0,6.9
