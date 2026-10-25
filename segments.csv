@@ -1,2 +1,4 @@
 segment_id,intersection,direction,lat_start,lon_start,lat_end,lon_end
-moskovskaya_X_E,Московская/X,E,42.xxxx,74.xxxx,42.yyyy,74.yyyy
+moskovskaya_X_E,Московская/X,E,42.839262, 74.608539, 42.843373, 74.608917
+
+
