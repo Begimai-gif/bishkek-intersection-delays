@@ -1,4 +1,3 @@
-
 name: collect
 on:
   schedule:
@@ -27,11 +26,10 @@ jobs:
       - name: collect loop
         env:
           DGIS_KEY: ${{ secrets.DGIS_KEY }}
-          DGIS_KEY_2: ${{ secrets.DGIS_KEY2 }}
           SCHEDULE: ${{ github.event.schedule }}
         run: |
           case "$SCHEDULE" in
-            "50 0 * * 1-5"|"50 10 * * 1-5") N=6 ;;
+            "50 0 * * 1-5"|"50 10 * * 1-5") N=4 ;;
             *) N=1 ;;
           esac
           git config user.name "bot"
