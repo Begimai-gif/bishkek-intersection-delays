@@ -27,7 +27,7 @@ jobs:
       - name: collect loop
         env:
           DGIS_KEY: ${{ secrets.DGIS_KEY }}
-          DGIS_KEY_2: ${{ secrets.DGIS_KEY_2 }}
+          DGIS_KEY_2: ${{ secrets.DGIS_KEY2 }}
           SCHEDULE: ${{ github.event.schedule }}
         run: |
           case "$SCHEDULE" in
